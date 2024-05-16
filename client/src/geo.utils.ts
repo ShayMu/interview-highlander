@@ -7,7 +7,7 @@ export async function getUserPosition() {
         (position) => {
           // Position object contains the user's latitude and longitude
           const { latitude, longitude } = position.coords;
-            userPos.lat = latitude + Math.random();
+            userPos.lat = latitude;
             userPos.lng = longitude;
             resolve(userPos);
         },

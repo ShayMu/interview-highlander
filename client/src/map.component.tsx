@@ -16,7 +16,7 @@ async function initMap(htmlRef:HTMLDivElement, mapCenter:google.maps.LatLngLiter
 
     _map = new Map(htmlRef, {
         center: mapCenter,
-        zoom: 10,
+        zoom: 15,
         mapId: 'highlander-interview'
     });
 
@@ -45,6 +45,8 @@ async function updateGoalMarker(pos:google.maps.LatLngLiteral) {
     else {
         const goalImg = document.createElement('img');
         goalImg.src = goalImgSrc;
+        goalImg.height = 100;
+        goalImg.width = 200;
         markers.goalMarker = new AdvancedMarkerElement({
             position: pos,
             map: _map,
@@ -60,21 +62,14 @@ function Map() {
 
 
     useEffect(() => {
-        if (!ref.current || _map) return;
-        initMap(ref.current, userPos);
-    }, [userPos]);
-
-    useEffect(()=>{
-        if (!_map) return;
-        updateUserMarker(userPos);
-        _map.panTo(userPos);
-        
-    }, [userPos]);
-
-    useEffect(()=>{
-        if (!_map) return;
-        updateGoalMarker(userPos);
-    }, [goalPos])
+        if (!ref.current) return;
+        if (!_map) initMap(ref.current, userPos);
+        else {
+            updateGoalMarker(goalPos);
+            updateUserMarker(userPos);
+            _map.panTo(userPos);
+        }
+    }, [userPos, goalPos]);
   
     return <div ref={ref} style={{height: '1000px', width: '100%'}} id="map" />;
   }
